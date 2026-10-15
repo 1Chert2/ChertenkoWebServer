@@ -1,0 +1,35 @@
+@page
+@model ChertenkoWebServer.Pages.Tasks.CreateModel
+@{
+    ViewData["Title"] = "Создание задачи";
+}
+
+<section class="card card--wide">
+    <h2>Создание задачи</h2>
+
+    <form method="post" class="task-form">
+        <div class="field">
+            <label asp-for="Title">Название задачи</label>
+            <input asp-for="Title" placeholder="Введите название (от 3 до 100 символов)" />
+            <span asp-validation-for="Title" class="field__error"></span>
+        </div>
+
+        <div class="field">
+            <label asp-for="CategoryId">Категория</label>
+            <select asp-for="CategoryId"
+                    asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+                <option value="">Без категории</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="field__error"></span>
+        </div>
+
+        <div class="row">
+            <button type="submit" class="btn">Создать задачу</button>
+            <a asp-page="/Tasks/Index" class="btn btn--ghost">Отмена</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

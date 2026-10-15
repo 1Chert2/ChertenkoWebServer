@@ -1,0 +1,44 @@
+@page "{id:int}"
+@model ChertenkoWebServer.Pages.Tasks.EditModel
+@{
+    ViewData["Title"] = $"Редактирование задачи #{Model.Id}";
+}
+
+<section class="card card--wide">
+    <h2>Редактирование задачи #@Model.Id</h2>
+
+    <form method="post" class="task-form">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="field">
+            <label asp-for="Title">Название задачи</label>
+            <input asp-for="Title" />
+            <span asp-validation-for="Title" class="field__error"></span>
+        </div>
+
+        <div class="field">
+            <label asp-for="CategoryId">Категория</label>
+            <select asp-for="CategoryId"
+                    asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+                <option value="">Без категории</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="field__error"></span>
+        </div>
+
+        <div class="field field--checkbox">
+            <label>
+                <input asp-for="IsDone" type="checkbox" />
+                Задача выполнена
+            </label>
+        </div>
+
+        <div class="row">
+            <button type="submit" class="btn">Сохранить</button>
+            <a asp-page="/Tasks/Index" class="btn btn--ghost">Отмена</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

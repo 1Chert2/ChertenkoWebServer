@@ -1,0 +1,31 @@
+@page
+@model ChertenkoWebServer.Pages.AboutModel
+@{
+    ViewData["Title"] = "О сервере";
+}
+
+<section class="card card--wide">
+    <h2>О сервере</h2>
+
+    <table class="task-table">
+        <tbody>
+            <tr>
+                <td><strong>Имя сервера</strong></td>
+                <td>@Model.ServerInfo.ServerName</td>
+            </tr>
+            <tr>
+                <td><strong>Версия</strong></td>
+                <td>@Model.ServerInfo.Version</td>
+            </tr>
+            <tr>
+                <td><strong>Текущее время</strong></td>
+                <td>@Model.ServerInfo.CurrentTime.ToString("dd.MM.yyyy HH:mm:ss")</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p class="reference__note">
+        Эта страница демонстрирует использование строго типизированной модели (PageModel)
+        и внедрения зависимостей через DI.
+    </p>
+</section>

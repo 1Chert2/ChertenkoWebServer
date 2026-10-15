@@ -1,0 +1,82 @@
+@page
+@model ChertenkoWebServer.Pages.Categories.IndexModel
+@{
+    ViewData["Title"] = "Категории";
+}
+
+<section class="card card--wide">
+    <h2>Категории</h2>
+
+    <!-- Список категорий -->
+    <table class="task-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Количество задач</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model.Categories)
+            {
+                <tr>
+                    <td>@category.Id</td>
+                    <td>
+                        @if (Model.EditId == category.Id)
+                        {
+                            <form method="post" asp-page-handler="Update" class="row">
+                                <input type="hidden" asp-for="EditId" value="@category.Id" />
+                                <input type="text" asp-for="EditName" value="@category.Name" class="input--small" />
+                                <button type="submit" class="btn btn--small">Сохранить</button>
+                                <a asp-page="/Categories/Index" class="btn btn--small btn--ghost">Отмена</a>
+                            </form>
+                        }
+                        else
+                        {
+                            @category.Name
+                        }
+                    </td>
+                    <td>@category.Tasks.Count</td>
+                    <td class="row">
+                        @if (Model.EditId != category.Id)
+                        {
+                            <a asp-page="/Categories/Index"
+                               asp-route-editId="@category.Id"
+                               class="btn btn--small">Изменить</a>
+                            <form method="post" asp-page-handler="Delete"
+                                  onsubmit="return confirm('Удалить категорию «@category.Name»? Задачи сохранятся.');">
+                                <input type="hidden" name="id" value="@category.Id" />
+                                <button type="submit" class="btn btn--small btn--danger">Удалить</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+            @if (!Model.Categories.Any())
+            {
+                <tr>
+                    <td colspan="4" class="task-list__empty">Категорий нет</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Форма создания -->
+    <h3>Добавить категорию</h3>
+    <form method="post" asp-page-handler="Create" class="row">
+        <label class="field grow">
+            <input asp-for="NewCategoryName" placeholder="Название новой категории" />
+            <span asp-validation-for="NewCategoryName" class="field__error"></span>
+        </label>
+        <button type="submit" class="btn">Добавить</button>
+    </form>
+
+    <p class="reference__note">
+        При удалении категории связанные задачи не удаляются — их CategoryId становится null (DeleteBehavior.SetNull).
+    </p>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

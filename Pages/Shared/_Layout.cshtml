@@ -1,0 +1,60 @@
+@inject Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper Html
+@{
+    var currentPath = ViewContext.HttpContext.Request.Path.ToString().TrimEnd('/');
+    if (string.IsNullOrEmpty(currentPath))
+    {
+        currentPath = "/";
+    }
+
+    string MenuClass(string path) =>
+        string.Equals(currentPath, path, StringComparison.OrdinalIgnoreCase)
+            ? "nav__link nav__link--active"
+            : "nav__link";
+
+    var title = ViewData["Title"] as string ?? "ChertenkoWebServer";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@title - ChertenkoWebServer</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+<header class="page-header">
+    <h1>ChertenkoWebServer</h1>
+    <p class="page-header__note">Учебный веб-сервер на ASP.NET Core</p>
+    <nav class="nav">
+        <a class="@MenuClass("/")" asp-page="/Index">Главная</a>
+        <a class="@MenuClass("/Tasks")" asp-page="/Tasks/Index">Задачи</a>
+        <a class="@MenuClass("/Categories")" asp-page="/Categories/Index">Категории</a>
+        <a class="@MenuClass("/Stats")" asp-page="/Stats">Статистика</a>
+        <a class="@MenuClass("/About")" asp-page="/About">О сервере</a>
+    </nav>
+</header>
+
+<main class="layout">
+    @if (TempData["SuccessMessage"] is string success)
+    {
+        <div class="message message--success">@success</div>
+    }
+    @if (TempData["ErrorMessage"] is string error)
+    {
+        <div class="message message--error">@error</div>
+    }
+
+    @RenderBody()
+</main>
+
+<footer class="page-footer">
+    <span id="footer-status">ChertenkoWebServer</span>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
